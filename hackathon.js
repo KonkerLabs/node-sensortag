@@ -6,6 +6,8 @@ require('./data/winstonConfig')
 
 const SensorTag = require('./index');
 const localDB = require('./data/localdb');
+const platform = require('./data/platform');
+
 const DATA_URL = 'https://data.demo.konkerlabs.net'
 
 SensorTag.discover(function(sensorTag) {
@@ -22,10 +24,14 @@ SensorTag.discover(function(sensorTag) {
   sensorTag.connectAndSetUp(connectAndSetUpCallback);
 
   function connectAndSetUpCallback() {
-      LOGGER.info('readDeviceName');
+      LOGGER.info('connected...');
       credentials = localDB.findCredentialByDeviceId(sensorTag.id);
-      LOGGER.info('\tdevice name = ' + sensorTag.id);
-      enableSensors();
+      if (!credentials) {
+          LOGGER.warn('device credentials not found')
+          platform.createPlatformCredentials(sensorTag.id, connectAndSetUpCallback)
+      } else {
+          enableSensors();
+      }
   };
 
   function enableSensors() {
