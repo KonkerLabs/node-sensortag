@@ -1,0 +1,11 @@
+{
+  "devices": [
+  ],
+  "applications": [
+    {
+      "client_id": "hackathon@konkerlabs.com",
+      "client_secret": "secret",
+      "app_name": "app_name"
+    }
+  ]
+}
