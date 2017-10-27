@@ -10,6 +10,8 @@ const platform = require('./data/platform');
 
 const DATA_URL = 'https://data.demo.konkerlabs.net'
 
+LOGGER.info('waiting for a SensorTag bluetooth connection...');
+
 SensorTag.discover(function(sensorTag) {
 
   let credentials = null;
