@@ -28,6 +28,11 @@ Edit with platform credentials:
 vi localdb.json
 ```
 
+## Run
+
+```sh
+node hackathon.js
+```
 
 ## Examples
 
