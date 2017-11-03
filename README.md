@@ -6,9 +6,11 @@
 Node.js lib for the [TI SensorTag](http://www.ti.com/tool/cc2541dk-sensor) and [TI CC2650 SensorTag](http://www.ti.com/tool/cc2650stk)
 
 ## Prerequisites
-
+ * [for raspberry install latest node] (https://www.npmjs.com/package/raspberry)
+ * [for rapberry-pi upgrade your GCC to V4.8]  (https://github.com/sandeepmistry/noble/issues/253)
  * [node-gyp install guide](https://github.com/nodejs/node-gyp#installation)
  * [noble prerequisites](https://github.com/sandeepmistry/noble#prerequisites)
+ 
 
 ## Install
 
