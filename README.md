@@ -6,6 +6,9 @@
 Node.js lib for the [TI SensorTag](http://www.ti.com/tool/cc2541dk-sensor) and [TI CC2650 SensorTag](http://www.ti.com/tool/cc2650stk)
 
 ## Prerequisites
+ * [for Raspberry Pi Zero] Dowload and install [node] manually the .tar.xz for [ARMv6] from (https://nodejs.org/en/download/)
+                           ie.  wget https://nodejs.org/dist/v8.9.0/node-v8.9.0-linux-armv6l.tar.xz
+                                sudo tar -C /usr/local --strip-components 1 -xf node-v8.9.0-linux-armv6l.tar.xz
  * [for raspberry install latest node] (https://www.npmjs.com/package/raspberry)
  * [for rapberry-pi upgrade your GCC to V4.8]  (https://github.com/sandeepmistry/noble/issues/253)
  * [node-gyp install guide](https://github.com/nodejs/node-gyp#installation)
