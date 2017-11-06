@@ -1,8 +1,8 @@
 const
     express = require('express'),
     passport = require('passport'),
+    bodyParser = require('body-parser'),
     http = require('http');
-
 
 // Configure Passport authenticated session persistence.
 //
@@ -49,7 +49,6 @@ function loggedIn(req, res, next) {
 }
 
 const app = express();
-app.use(express.static('public'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({extended: true}));
 app.use(require('express-session')({
@@ -59,6 +58,7 @@ app.use(require('express-session')({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.json());
 
 app.get('/auth/facebook',
     passport.authenticate('facebook'));
@@ -70,11 +70,34 @@ app.get('/auth/facebook/callback',
         res.redirect('/vote.html');
     });
 
+app.get('/vote.html',
+    function (req, res, next) {
+        if (req.user) {
+            next();
+        } else {
+            res.redirect('/login.html');
+        }
+    });
+
 app.get('/',
     loggedIn,
     function (req, res) {
         res.redirect('/vote.html');
     });
+
+app.post('/api/vote',
+    function (req, res) {
+        if (req.user) {
+            let json = req.body;
+            json.user = req.user._json;
+            req.logout();
+            res.send(json);    // echo the result back
+        } else {
+            res.sendStatus(403);
+        }
+    });
+
+app.use(express.static('public'));
 
 /** Start app **/
 

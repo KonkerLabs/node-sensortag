@@ -39,9 +39,6 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
                 </li>
             </ul>
         </div>
@@ -51,11 +48,14 @@
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-        <div class="col-lg-12 text-center">
+        <div id="div-buttons" class="col-lg-12 text-center">
             <h1 class="mt-5">Queremos saber a sua opnião.</h1>
             <p class="lead">Se sente confortável?</p>
-            <button type="button" class="btn btn-lg btn-success" >Sim</button>
-            <button type="button" class="btn btn-lg btn-danger">Não</button>
+            <button type="button" class="btn btn-lg btn-success" onclick="vote('yes')">Sim</button>
+            <button type="button" class="btn btn-lg btn-danger" onclick="vote('no')">Não</button>
+        </div>
+        <div id="div-thanks" class="col-lg-12 text-center" style="display:none;">
+            <h1 class="mt-5">Sua opinião foi recebida com sucesso! Obrigado.</h1>
         </div>
     </div>
 </div>
@@ -63,6 +63,22 @@
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function vote(value) {
+        $.ajax({
+            type: 'POST',
+            url: '/api/vote',
+            data: '{"value":"' + value + '"}',
+            success: function (data) {
+                $('#div-thanks').show();
+                $('#div-buttons').hide();
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
+    }
+</script>
 
 </body>
 
