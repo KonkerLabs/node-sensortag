@@ -23,6 +23,12 @@
                 padding-top: 56px;
             }
         }
+        .btn-space {
+            margin: 5px;
+        }
+        .btn:hover {
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -51,11 +57,24 @@
         <div id="div-buttons" class="col-lg-12 text-center">
             <h1 class="mt-5">Queremos saber a sua opnião.</h1>
             <p class="lead">Se sente confortável?</p>
-            <button type="button" class="btn btn-lg btn-success" onclick="vote('yes')">Sim</button>
-            <button type="button" class="btn btn-lg btn-danger" onclick="vote('no')">Não</button>
+            <button type="button" class="btn btn-lg btn-space btn-success" onclick="vote('yes')">Sim</button>
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="voteNo()">Não</button>
         </div>
         <div id="div-thanks" class="col-lg-12 text-center" style="display:none;">
             <h1 class="mt-5">Sua opinião foi recebida com sucesso! Obrigado.</h1>
+        </div>
+        <div id="div-reasons" class="col-lg-12 text-center" style="display:none;">
+            <h1 class="mt-5">Queremos saber a sua opnião.</h1>
+            <p class="lead">&nbsp;</p>
+
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="vote('no', 'cold')">Muito frio?</button>
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="vote('no', 'hot')">Muito quente?</button>
+
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="vote('no', 'dark')">Muito escuro?</button>
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="vote('no', 'bright')">Muito claro?</button>
+
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="vote('no', 'noise')">Barulho demais?</button>
+            <button type="button" class="btn btn-lg btn-space btn-danger" onclick="vote('no', 'other')">Outro motivo</button>
         </div>
     </div>
 </div>
@@ -65,14 +84,20 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    function vote(value) {
+    function voteNo() {
+        $('#div-reasons').show();
+        $('#div-buttons').hide();
+    }
+
+    function vote(value, reason) {
         $.ajax({
             type: 'POST',
             url: '/api/vote',
-            data: '{"value":"' + value + '"}',
+            data: '{"value":"' + value + '", "reason":"' + reason + '"}',
             success: function (data) {
                 $('#div-thanks').show();
                 $('#div-buttons').hide();
+                $('#div-reasons').hide();
             },
             contentType: "application/json",
             dataType: 'json'
