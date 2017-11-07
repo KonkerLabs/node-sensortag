@@ -7,5 +7,14 @@
       "client_secret": "secret",
       "app_name": "app_name"
     }
-  ]
+  ],
+  "locations": [
+    {
+      "token": "",
+      "username": "",
+      "password": ""
+    }
+  ],
+  "FACEBOOK_APP_ID": "",
+  "FACEBOOK_APP_SECRET": ""
 }
