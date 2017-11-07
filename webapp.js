@@ -2,7 +2,14 @@ const
     express = require('express'),
     passport = require('passport'),
     bodyParser = require('body-parser'),
-    http = require('http');
+    http = require('http'),
+    axios = require('axios');
+
+const localDB = require('./data/localdb');
+
+require('./data/winstonConfig')
+
+const DATA_URL = 'https://data.demo.konkerlabs.net'
 
 // Configure Passport authenticated session persistence.
 //
@@ -26,7 +33,8 @@ passport.deserializeUser(function (obj, cb) {
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.use(new FacebookStrategy({
-
+        clientID: localDB.getParameter('FACEBOOK_APP_ID'),
+        clientSecret: localDB.getParameter('FACEBOOK_APP_SECRET'),
         callbackURL: "http://localhost:3000/auth/facebook/callback",
         profileFields: ['id', 'gender', 'age_range', 'birthday', 'first_name']
     },
@@ -40,19 +48,11 @@ passport.use(new FacebookStrategy({
     }
 ));
 
-function loggedIn(req, res, next) {
-    if (req.user) {
-        next();
-    } else {
-        res.redirect('/login.html');
-    }
-}
-
 const app = express();
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({extended: true}));
 app.use(require('express-session')({
-    secret: 'keyboard cat',
+    secret: '4umn5mhd2ctf',
     resave: true,
     saveUninitialized: true
 }));
@@ -72,6 +72,33 @@ app.get('/auth/facebook/callback',
 
 app.get('/vote.html',
     function (req, res, next) {
+        if (!req.user || !req.session.token) {
+            res.redirect('/login.html');
+            return;
+        }
+
+        // validate token
+        let location = localDB.findLocationByToken(req.session.token);
+        if (location === undefined) {
+            res.redirect('/errortoken.html');
+            return;
+        }
+
+        next();
+    });
+
+app.get('/login.html',
+    function (req, res, next) {
+        if (req.query.token) {
+            req.session.token = req.query.token;
+            next();
+        } else {
+            res.redirect('/errortoken.html');
+        }
+    });
+
+app.get('/',
+    function (req, res, next) {
         if (req.user) {
             next();
         } else {
@@ -79,17 +106,25 @@ app.get('/vote.html',
         }
     });
 
-app.get('/',
-    loggedIn,
-    function (req, res) {
-        res.redirect('/vote.html');
-    });
-
 app.post('/api/vote',
     function (req, res) {
+        let location = localDB.findLocationByToken(req.session.token);
+
         if (req.user) {
             let json = req.body;
             json.user = req.user._json;
+
+            username = location.username
+            password = location.password
+            axios.post(`${DATA_URL}/pub/${username}/vote`,
+                json,
+                {
+                    auth: {
+                        username: username,
+                        password: password
+                    }
+                });
+
             req.logout();
             res.send(json);    // echo the result back
         } else {

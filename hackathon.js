@@ -8,8 +8,6 @@ const SensorTag = require('./index');
 const localDB = require('./data/localdb');
 const platform = require('./data/platform');
 
-require('./webapp');
-
 const DATA_URL = 'https://data.demo.konkerlabs.net'
 
 LOGGER.info('waiting for a SensorTag bluetooth connection...');

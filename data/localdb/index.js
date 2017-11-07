@@ -18,11 +18,22 @@ const findByApplicationName = (applicationName) => {
     return db.get('applications').find({ app_name: applicationName }).value()
 }
 
+const findLocationByToken = (token) => {
+    return db.get('locations').find({ token: token }).value()
+}
+
+const getParameter = (parameter) => {
+    return db.get(parameter).write()
+}
+
 // **************** EXPORTS ****************
 
 module.exports = {
+    findLocationByToken,
     findByApplicationName,
 
     findCredentialByDeviceId,
-    addCredential
+    addCredential,
+
+    getParameter
 }
